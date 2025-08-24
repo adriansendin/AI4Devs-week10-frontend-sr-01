@@ -11,3 +11,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Estilos para el tablero Kanban */
+.kanban-board {
+  min-height: 70vh;
+}
+
+.candidate-card {
+  transition: all 0.2s ease;
+  cursor: grab;
+}
+
+.candidate-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.candidate-card:active {
+  cursor: grabbing;
+}
+
+.min-height-200 {
+  min-height: 200px;
+}
+
+/* Responsive design para móviles */
+@media (max-width: 768px) {
+  .kanban-board .col {
+    margin-bottom: 1rem;
+  }
+  
+  .candidate-card {
+    margin-bottom: 0.5rem;
+  }
+}

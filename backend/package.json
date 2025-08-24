@@ -10,7 +10,9 @@
         "test": "jest",
         "prisma:init": "npx prisma init",
         "prisma:generate": "npx prisma generate",
-        "start:prod": "npm run build && npm start"
+        "start:prod": "npm run build && npm start",
+        "prisma:seed": "ts-node prisma/seed.ts",
+        "prisma:db:seed": "npx prisma db seed"
     },
     "keywords": [],
     "author": "",
@@ -23,6 +25,9 @@
         "multer": "^1.4.5-lts.1",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.0"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",
