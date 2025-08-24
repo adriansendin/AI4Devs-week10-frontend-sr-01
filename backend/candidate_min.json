@@ -1,0 +1,11 @@
+{
+    "firstName": "Test",
+    "lastName": "SinFechas",
+    "email": "test.sinfechas@example.com",
+    "phone": "600000000",
+    "address": "Calle Prueba 123",
+    "educations": [],
+    "workExperiences": [],
+    "cv": { "filePath": "", "fileType": "" }
+  }
+  
