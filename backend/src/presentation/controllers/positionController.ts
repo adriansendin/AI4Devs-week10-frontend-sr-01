@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getCandidatesByPositionService, getInterviewFlowByPositionService } from '../../application/services/positionService';
+import { listPositionsService } from '../../application/services/positionService';
 
 export const getCandidatesByPosition = async (req: Request, res: Response) => {
     try {
@@ -27,4 +28,13 @@ export const getInterviewFlowByPosition = async (req: Request, res: Response) =>
             res.status(500).json({ message: 'Server error', error: String(error) });
         }
     }
+};
+
+export const listPositions = async (req: Request, res: Response) => {
+  try {
+    const data = await listPositionsService();
+    res.status(200).json(data);
+  } catch (e) {
+    res.status(500).json({ message: 'Error listing positions' });
+  }
 };

@@ -65,3 +65,11 @@ export const getInterviewFlowByPositionService = async (positionId: number) => {
         }
     };
 };
+
+export const listPositionsService = async () => {
+  const positions = await prisma.position.findMany({
+    select: { id: true, title: true, status: true, applicationDeadline: true },
+    orderBy: { id: 'asc' },
+  });
+  return positions;
+};
