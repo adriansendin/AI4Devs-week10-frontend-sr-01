@@ -105,51 +105,86 @@ async function main() {
   if (existingApplications.length === 0) {
     console.log('Adding applications...');
     
-    // Create Applications
-    await prisma.application.create({
+    // Create Applications with fixed realistic scores
+    const application1 = await prisma.application.create({
       data: {
-        positionId: position1.id,
         candidateId: candidate1.id,
-        applicationDate: new Date(),
-        currentInterviewStep: interviewStep2.id,
+        positionId: position1.id,
+        currentInterviewStep: interviewStep2.id, // Technical Interview
+        averageScore: 4, // Good candidate
       },
     });
 
-    await prisma.application.create({
+    const application2 = await prisma.application.create({
       data: {
-        positionId: position2.id,
         candidateId: candidate1.id,
-        applicationDate: new Date(),
-        currentInterviewStep: interviewStep2.id,
-      },
-    });
-
-    await prisma.application.create({
-      data: {
-        positionId: position1.id,
-        candidateId: candidate2.id,
-        applicationDate: new Date(),
-        currentInterviewStep: interviewStep2.id,
-      },
-    });
-
-    await prisma.application.create({
-      data: {
-        positionId: position1.id,
-        candidateId: candidate3.id,
-        applicationDate: new Date(),
-        currentInterviewStep: interviewStep1.id,
-      },
-    });
-
-    await prisma.application.create({
-      data: {
         positionId: position2.id,
-        candidateId: candidate2.id,
-        applicationDate: new Date(),
-        currentInterviewStep: interviewStep4.id,
+        currentInterviewStep: interviewStep4.id, // HR Screening
+        averageScore: 3, // Average candidate
       },
     });
+
+    const application3 = await prisma.application.create({
+      data: {
+        candidateId: candidate2.id,
+        positionId: position1.id,
+        currentInterviewStep: interviewStep2.id, // Technical Interview
+        averageScore: 5, // Excellent candidate
+      },
+    });
+
+    const application4 = await prisma.application.create({
+      data: {
+        candidateId: candidate2.id,
+        positionId: position2.id,
+        currentInterviewStep: interviewStep5.id, // Data Analysis Test
+        averageScore: 2, // Below average candidate
+      },
+    });
+  }
+
+  // Asegurar un empleado para asignar entrevistas (crea uno si no hay)
+  const employee = await (async () => {
+    const existing = await prisma.employee.findFirst();
+    if (existing) return existing;
+    const company = await prisma.company.findFirst();
+    return prisma.employee.create({
+      data: {
+        companyId: company.id,
+        name: 'Seeder',
+        email: `seeder+${Date.now()}@example.com`,
+        role: 'HR',
+      },
+    });
+  })();
+
+  // Reasignar puntuaciones (1..5) a todas las aplicaciones, creando una entrevista si no existe
+  const allAppsForScoring = await prisma.application.findMany({
+    include: { interviews: true },
+  });
+
+  for (const app of allAppsForScoring) {
+    const score = Math.floor(Math.random() * 5) + 1;
+
+    if (app.interviews.length === 0) {
+      await prisma.interview.create({
+        data: {
+          applicationId: app.id,
+          interviewStepId: app.currentInterviewStep,
+          employeeId: employee.id,
+          interviewDate: new Date(),
+          score,
+          result: 'seeded',
+          notes: 'seed incremental score',
+        },
+      });
+    } else {
+      // Si ya hay entrevistas, actualiza la primera o todas (aquí todas) con el nuevo score
+      await prisma.interview.updateMany({
+        where: { applicationId: app.id },
+        data: { score },
+      });
+    }
   }
 
   console.log('Seed incremental completed successfully!');
