@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert, InputGroup, FormControl, Card, Container, Row, Col } from 'react-bootstrap';
-import { Trash } from 'react-bootstrap-icons';
+import { Trash, ArrowLeft } from 'react-bootstrap-icons';
 import FileUploader from './FileUploader';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const AddCandidateForm = () => {
+    const navigate = useNavigate();
     const [candidate, setCandidate] = useState({
         firstName: '',
         lastName: '',
@@ -99,8 +101,18 @@ const AddCandidateForm = () => {
     };
 
     return (
-        <Container className="mt-5">
-            <h1 className="mb-4">Agregar Candidato</h1>
+        <Container className="mt-4">
+            {/* Header con botón de regreso */}
+            <div className="d-flex align-items-center mb-4">
+                <Button
+                    variant="outline-secondary"
+                    className="me-3"
+                    onClick={() => navigate(-1)}
+                >
+                    <ArrowLeft /> Volver
+                </Button>
+                <h2 className="mb-0">Añadir Candidato</h2>
+            </div>
             <Card className="shadow p-4">
                 <Form onSubmit={handleSubmit}>
                     <Row>

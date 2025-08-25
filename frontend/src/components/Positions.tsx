@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'react-bootstrap-icons';
 
 type Position = {
     id: string;
@@ -16,9 +17,20 @@ const mockPositions: Position[] = [
 ];
 
 const Positions: React.FC = () => {
+    const navigate = useNavigate();
     return (
-        <Container className="mt-5">
-            <h2 className="text-center mb-4">Posiciones</h2>
+        <Container className="mt-4">
+            {/* Header con botón de regreso */}
+            <div className="d-flex align-items-center mb-4">
+                <Button
+                    variant="outline-secondary"
+                    className="me-3"
+                    onClick={() => navigate('/')}
+                >
+                    Volver
+                </Button>
+                <h2 className="mb-0">Posiciones</h2>
+            </div>
             <Row className="mb-4">
                 <Col md={3}>
                     <Form.Control type="text" placeholder="Buscar por título" />
